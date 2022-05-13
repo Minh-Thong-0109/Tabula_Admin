@@ -80,7 +80,7 @@ function getDataInfo(editStatus) {
     checkloaiNguoiDung() &&
     checkloaiNgonNgu() &&
     checkMoTa();
-  if (isValid || editStatus==true) {
+  if (isValid || editStatus == true) {
     var user = new User(
       _taiKhoan,
       _hoTen,
@@ -134,6 +134,13 @@ function checkTaiKhoan() {
       "TaiKhoan",
       "",
       "Vui lòng không để trống phần Tài Khoản"
+    ) &&
+    checkDuplicate(
+      getEle("TaiKhoan").value,
+      "TaiKhoan",
+      "Tài khoản này đã tồn tại",
+      data.arr,
+      editStatus
     );
   return result;
 }
