@@ -16,11 +16,14 @@ getEle("btnThemNguoiDung").addEventListener("click", function () {
     if (user != null) {
       $("#myModal").modal("hide");
       getEle("txtThongBao").classList.add("alert-success");
-      getEle("txtThongBao").innerHTML = "Add new user success !!!";
+      getEle("txtThongBao").innerHTML = "Add new user successfully !!!";
+      setTimeout(function () {
+        getEle("txtThongBao").style.opacity = "0";
+      }, 1800);
       setTimeout(function () {
         getEle("txtThongBao").classList.remove("alert-success");
         getEle("txtThongBao").innerHTML = "";
-      }, 2500);
+      }, 3500);
       var promise = data.postData(user);
       promise
         .then(function (result) {
@@ -56,7 +59,6 @@ function editUser(id) {
   var promise = data.findData(id);
   promise
     .then(function (result) {
-      console.log(result.data);
       getEle("TaiKhoan").value = result.data.taiKhoan;
       getEle("HoTen").value = result.data.hoTen;
       getEle("MatKhau").value = result.data.matKhau;
@@ -69,27 +71,55 @@ function editUser(id) {
     .catch(function (error) {
       console.log(error);
     });
-  getEle("btnSave").onclick = function () {
+  getEle("btnSave").onclick = async function () {
     var user = { id: id, ...getDataInfo(editStatus) };
     console.log(user);
-    var promise = data.putData(user.id, user);
-    promise
-      .then(function (result) {
-        $("#myModal").modal("hide");
-        getEle("txtThongBao").classList.add("alert-success");
-        getEle("txtThongBao").innerHTML = "Edit success !!!";
-        getListData();
-        clearInput();
-        setTimeout(function () {
-          getEle("txtThongBao").style.opacity = "0";
-        }, 1000);
-        setTimeout(function () {
-          getEle("txtThongBao").classList.remove("alert-success");
-          getEle("txtThongBao").innerHTML = "";
-        }, 3000);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    var result = [];
+    result.push(
+      checkHoTen(),
+      checkTaiKhoan(),
+      checkMatKhau(),
+      checkEmail(),
+      checkHinhAnh(),
+      checkloaiNguoiDung(),
+      checkloaiNgonNgu(),
+      checkMoTa()
+    );
+    console.log(getEle("MatKhau").value);
+    console.log(result);
+    if (result.includes(0) == false) {
+      var promise = data.putData(user.id, user);
+      promise
+        .then(function (data) {
+          $("#myModal").modal("hide");
+          getEle("txtThongBao").classList.add("alert-success");
+          getEle("txtThongBao").innerHTML = "Edit successfully !!!";
+          getListData();
+          clearInput();
+          setTimeout(function () {
+            getEle("txtThongBao").style.opacity = "0";
+          }, 1000);
+          setTimeout(function () {
+            getEle("txtThongBao").classList.remove("alert-success");
+            getEle("txtThongBao").innerHTML = "";
+          }, 3000);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
   };
 }
+
+//event when input on search field
+getEle("search").addEventListener("keyup", function () {
+  var value = getEle("search").value;
+  var promise = data.searchData(value);
+  promise
+    .then(function (result) {
+      renderHTML(result.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+});

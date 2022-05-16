@@ -60,7 +60,7 @@ function getDataInfo(editStatus) {
   checkHoTen();
   var _matKhau = getEle("MatKhau").value;
   checkMatKhau();
-  var email = getEle("Email").value;
+  var _email = getEle("Email").value;
   checkEmail();
   var _hinhAnh = getEle("HinhAnh").value;
   checkHinhAnh();
@@ -85,7 +85,7 @@ function getDataInfo(editStatus) {
       _taiKhoan,
       _hoTen,
       _matKhau,
-      email,
+      _email,
       _hinhAnh,
       _loaiND,
       _ngonNgu,
@@ -94,6 +94,12 @@ function getDataInfo(editStatus) {
     return user;
   }
   return null;
+}
+
+//make temporary
+async function makeTemp() {
+  temp = await data.fetchData();
+  return temp.data;
 }
 
 // clear input
@@ -135,16 +141,15 @@ function checkTaiKhoan() {
       "",
       "Vui lòng không để trống phần Tài Khoản"
     ) &&
-    checkDuplicate(
+    validation.checkDuplicate(
       getEle("TaiKhoan").value,
       "TaiKhoan",
-      "Tài khoản này đã tồn tại",
+      "Tài khoản đã tồn tại",
       data.arr,
       editStatus
     );
   return result;
 }
-
 // check input HoTen
 function checkHoTen() {
   var result = true;
@@ -220,7 +225,7 @@ function checkHinhAnh() {
     getEle("HinhAnh").value,
     "HinhAnh",
     "",
-    "Vui lòng không để trống phần Mật khẩu"
+    "Vui lòng không để trống phần Hình ảnh"
   );
   return result;
 }

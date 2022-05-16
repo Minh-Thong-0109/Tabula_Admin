@@ -61,7 +61,7 @@ function Validation() {
     var status = false;
     for (var i = 0; i < arr.length; i++) {
       var user = arr[i];
-      if (user.TaiKhoan === value) {
+      if (user.taiKhoan == value.trim()) {
         status = true;
         break;
       }
@@ -72,6 +72,9 @@ function Validation() {
       getEle("txt" + id).style.display = "block";
       return false;
     }
+    getEle(id).style.border = "1px solid green";
+    getEle("txt" + id).innerHTML = "";
+    getEle("txt" + id).style.display = "none";
     return true;
   };
 }
