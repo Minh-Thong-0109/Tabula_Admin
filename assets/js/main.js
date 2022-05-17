@@ -15,6 +15,7 @@ getEle("btnThemNguoiDung").addEventListener("click", function () {
     var user = getDataInfo(editStatus);
     if (user != null) {
       $("#myModal").modal("hide");
+      getEle("txtThongBao").style.opacity = "1";
       getEle("txtThongBao").classList.add("alert-success");
       getEle("txtThongBao").innerHTML = "Add new user successfully !!!";
       setTimeout(function () {
@@ -85,15 +86,14 @@ function editUser(id) {
       checkloaiNgonNgu(),
       checkMoTa()
     );
-    console.log(getEle("MatKhau").value);
-    console.log(result);
     if (result.includes(0) == false) {
       var promise = data.putData(user.id, user);
+      $("#myModal").modal("hide");
+      getEle("txtThongBao").style.opacity = "1";
+      getEle("txtThongBao").classList.add("alert-success");
+      getEle("txtThongBao").innerHTML = "Edit successfully !!!";
       promise
         .then(function (data) {
-          $("#myModal").modal("hide");
-          getEle("txtThongBao").classList.add("alert-success");
-          getEle("txtThongBao").innerHTML = "Edit successfully !!!";
           getListData();
           clearInput();
           setTimeout(function () {
@@ -113,7 +113,7 @@ function editUser(id) {
 
 //event when input on search field
 getEle("search").addEventListener("keyup", function () {
-  var value = getEle("search").value;
+  var value = removeAccents(getEle("search").value);
   var promise = data.searchData(value);
   promise
     .then(function (result) {
